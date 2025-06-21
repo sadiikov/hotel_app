@@ -14,4 +14,3 @@ public class Reservation {
     private Timestamp checkOut;
     private ReservationStatus status;
 }
-

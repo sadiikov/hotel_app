@@ -11,14 +11,15 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import uz.hotel.dao.UserDAO;
+import uz.hotel.repository.UserDAO;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
-    final UserDAO userDAO;
+    private final UserDAO userDAO;
+    private final CustomSuccessHandler customSuccessHandler;
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
@@ -28,12 +29,13 @@ public class SecurityConfig {
                     req
                             .requestMatchers("/","/auth/**")
                             .permitAll()
-
-                            .requestMatchers("/api/admin/info/private")
-                            .hasAnyAuthority("READ_PRIVATE_DATA")
-
-                            .requestMatchers("/api/admin/**")
+                            
+                            .requestMatchers("/admin/**")
                             .hasRole("ADMIN")
+
+                            .requestMatchers("/user/**")
+                            .hasRole("USER")
+                            
 //
 //                            .requestMatchers("/articleDelete")
 //                            .hasAnyAuthority("DELETE_ARTICLE")
@@ -56,11 +58,15 @@ public class SecurityConfig {
         http
                 .formLogin(formLogin -> {
                     formLogin
-                            .loginPage("/auth/sign-in")
-                            .usernameParameter("email")
-                            .passwordParameter("password")
-                            .defaultSuccessUrl("/cabinet");
+                            .loginPage("/auth/sign-in")               // GET: the custom login page
+                            .loginProcessingUrl("/auth/sign-in")      // POST: form action for login
+                            .usernameParameter("email")               // name of email field
+                            .passwordParameter("password")            // name of password field
+                            .successHandler(customSuccessHandler)     // optional: for role-based redirects
+                            .failureUrl("/auth/sign-in?error")        // redirect back on login failure
+                            .permitAll();
                 });
+
 
         http
                 .userDetailsService(userDetailsService());

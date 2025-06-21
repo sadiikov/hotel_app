@@ -13,7 +13,7 @@ import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
-@ComponentScan("uz.app.authentication")
+@ComponentScan(basePackages = "uz.hotel")
 @Configuration
 @EnableWebMvc
 //@EnableAspectJAutoProxy
@@ -28,7 +28,7 @@ public class WebMVCConfig {
     public DriverManagerDataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/auth");
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/hotel_app");
         dataSource.setUsername("postgres");
         dataSource.setPassword("root123");
         return dataSource;
