@@ -30,8 +30,7 @@ public class AuthController {
     public String signUpPost(@RequestParam("name") String name,
                              @RequestParam("email") String email,
                              @RequestParam("password") String password,
-                             @RequestParam("balance") String balance,
-                                 Model model){
+                             @RequestParam("balance") String balance){
 
         Optional<User> optionalUser = userDAO.getUserByEmailAndPassword(email, password);
         if (optionalUser.isPresent()){
@@ -45,7 +44,7 @@ public class AuthController {
             throw new DataNotFoundException("Balance must be a valid number");
         }
 
-        if(balanceValue<=0){
+        if(balanceValue < 0){
             throw new OperationCannotBeDoneException("balance should be positive");
         }
 

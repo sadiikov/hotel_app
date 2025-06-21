@@ -39,11 +39,6 @@ public class WebMVCConfig {
         return new JdbcTemplate(dataSource());
     }
 
-
-
-
-
-
     @Bean
     public SpringResourceTemplateResolver templateResolver(){
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
