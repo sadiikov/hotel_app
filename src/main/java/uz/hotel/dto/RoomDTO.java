@@ -22,8 +22,7 @@ public class RoomDTO {
         room.setType(RoomType.valueOf(this.type));
         room.setPrice(this.price);
         room.setDescription(this.description);
-        room.setRating(this.rating != null ? this.rating : 0.0);
-        room.setStatus(this.status != null ? this.status : RoomStatus.AVAILABLE);
+        room.setStatus(this.status != null ? this.status : RoomStatus.ACTIVE);
         return room;
     }
 }

@@ -24,7 +24,7 @@ public class RoomDAO {
     private final JdbcTemplate jdbcTemplate;
 
     public void saveRooms(List<Room> rooms, int hotelId) {
-        String sql = "INSERT INTO rooms (hotel_id, number, type, price, description, rating) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO rooms (hotel_id, number, type, price, description) VALUES (?, ?, ?, ?, ?)";
 
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
@@ -35,7 +35,6 @@ public class RoomDAO {
                 ps.setString(3, room.getType().name());
                 ps.setDouble(4, room.getPrice());
                 ps.setString(5, room.getDescription());
-                ps.setObject(6, room.getRating());
             }
 
             @Override
@@ -55,7 +54,6 @@ public class RoomDAO {
             room.setType(RoomType.valueOf(rs.getString("type")));
             room.setPrice(rs.getDouble("price"));
             room.setDescription(rs.getString("description"));
-            room.setRating(rs.getDouble("rating"));
             room.setStatus(RoomStatus.valueOf(rs.getString("status")));
             return room;
         });
@@ -64,7 +62,7 @@ public class RoomDAO {
     public void updateRoom(Room room) {
         String sql = """
                 UPDATE rooms
-                SET number = ?, type = ?, price = ?, description = ?, rating = ?, status = ?
+                SET number = ?, type = ?, price = ?, description = ?, status = ?
                 WHERE id = ?
                 """;
         jdbcTemplate.update(sql,
@@ -72,7 +70,6 @@ public class RoomDAO {
                 room.getType().name(),
                 room.getPrice(),
                 room.getDescription(),
-                room.getRating(),
                 room.getStatus().name(),
                 room.getId());
     }

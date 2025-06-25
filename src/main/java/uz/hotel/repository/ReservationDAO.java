@@ -18,7 +18,7 @@ import java.util.Optional;
 public class ReservationDAO {
     private final JdbcTemplate jdbcTemplate;
 
-    public List<ReservationDTO> findAll(){
+    public List<ReservationDTO> findAll() {
         String sql = """
                 SELECT r.id, r.user_id, r.room_id, r.check_in, r.check_out, r.status, r.total_price,
                                          rm.number AS room_number, h.name AS hotel_name
@@ -43,15 +43,15 @@ public class ReservationDAO {
         });
     }
 
-    public List<ReservationDTO> findAllPendingsAndCancels(){
+    public List<ReservationDTO> findAllPendingsAndCancels() {
         String sql = """
-        SELECT r.id, r.user_id, r.room_id, r.check_in, r.check_out, r.status, r.total_price,
-                                         rm.number AS room_number, h.name AS hotel_name
-                                  FROM reservations r
-                                  JOIN rooms rm ON r.room_id = rm.id
-                                  JOIN hotels h ON rm.hotel_id = h.id
-                                  WHERE r.status = 'PENDING' AND r.status = 'CANCELED_BY_USER'
-    """;
+                    SELECT r.id, r.user_id, r.room_id, r.check_in, r.check_out, r.status, r.total_price,
+                                                     rm.number AS room_number, h.name AS hotel_name
+                                              FROM reservations r
+                                              JOIN rooms rm ON r.room_id = rm.id
+                                              JOIN hotels h ON rm.hotel_id = h.id
+                                              WHERE r.status = 'PENDING' AND r.status = 'CANCELED_BY_USER'
+                """;
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             ReservationDTO info = new ReservationDTO();
             info.setId(rs.getInt("id"));
@@ -69,13 +69,13 @@ public class ReservationDAO {
 
     public List<ReservationDTO> findAllPendingReservationsWithDetails() {
         String sql = """
-        SELECT r.id, r.user_id, r.room_id, r.check_in, r.check_out, r.status, r.total_price,
-                                         rm.number AS room_number, h.name AS hotel_name
-                                  FROM reservations r
-                                  JOIN rooms rm ON r.room_id = rm.id
-                                  JOIN hotels h ON rm.hotel_id = h.id
-                                  WHERE r.status = 'PENDING' AND r.status = 'ACCEPTED'
-    """;
+                    SELECT r.id, r.user_id, r.room_id, r.check_in, r.check_out, r.status, r.total_price,
+                                                     rm.number AS room_number, h.name AS hotel_name
+                                              FROM reservations r
+                                              JOIN rooms rm ON r.room_id = rm.id
+                                              JOIN hotels h ON rm.hotel_id = h.id
+                                              WHERE r.status = 'PENDING' AND r.status = 'ACCEPTED'
+                """;
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             ReservationDTO info = new ReservationDTO();
@@ -117,17 +117,7 @@ public class ReservationDAO {
     public Reservation findReservationById(int reservationId) {
         String sql = "SELECT * FROM reservations WHERE id = ?";
 
-        return jdbcTemplate.queryForObject(sql, new Object[]{reservationId}, (rs, rowNum) -> {
-            Reservation reservation = new Reservation();
-            reservation.setId(rs.getInt("id"));
-            reservation.setUserId(rs.getInt("user_id"));
-            reservation.setRoomId(rs.getInt("room_id"));
-            reservation.setCheckIn(rs.getTimestamp("check_in"));
-            reservation.setCheckOut(rs.getTimestamp("check_out"));
-            reservation.setStatus(ReservationStatus.valueOf(rs.getString("status")));
-            reservation.setTotalPrice(rs.getDouble("total_price"));
-            return reservation;
-        });
+        return jdbcTemplate.queryForObject(sql, new Object[]{reservationId}, BeanPropertyRowMapper.newInstance(Reservation.class));
     }
 
     public void save(Reservation reservation) {

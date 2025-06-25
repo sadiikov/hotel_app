@@ -38,7 +38,6 @@ public class HotelService {
             room.setType(RoomType.STANDARD);
             room.setNumber("1" + String.format("%02d", i + 1));
             room.setPrice(dto.getStandartPrice());
-            room.setRating(0.0);
             room.setDescription(dto.getStandartDescription());
             rooms.add(room);
         }
@@ -48,7 +47,6 @@ public class HotelService {
             room.setType(RoomType.LUXE);
             room.setNumber("2" + String.format("%02d", i + 1));
             room.setPrice(dto.getLuxePrice());
-            room.setRating(0.0);
             room.setDescription(dto.getLuxeDescription());
             rooms.add(room);
         }
