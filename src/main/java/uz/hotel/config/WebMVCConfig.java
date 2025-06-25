@@ -29,7 +29,7 @@ public class WebMVCConfig {
     public DriverManagerDataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/hotel_app");
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/hotel_app2");
         dataSource.setUsername("postgres");
         dataSource.setPassword("root123");
         return dataSource;

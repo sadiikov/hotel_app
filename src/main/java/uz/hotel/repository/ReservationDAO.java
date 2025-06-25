@@ -20,21 +20,21 @@ public class ReservationDAO {
 
     public List<ReservationDTO> findAll() {
         String sql = """
-                SELECT r.id, r.user_id, r.room_id, r.check_in, r.check_out, r.status, r.total_price,
-                                         rm.number AS room_number, h.name AS hotel_name
-                                  FROM reservations r
-                                  JOIN rooms rm ON r.room_id = rm.id
-                                  JOIN hotels h ON rm.hotel_id = h.id
-                                  ORDER BY r.id DESC
-                """;
+            SELECT r.id, r.user_id, r.room_id, r.check_in, r.check_out, r.status, r.total_price,
+                   rm.number AS room_number, h.name AS hotel_name
+            FROM reservations r
+            JOIN rooms rm ON r.room_id = rm.id
+            JOIN hotels h ON rm.hotel_id = h.id
+            ORDER BY r.id DESC
+            """;
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             ReservationDTO info = new ReservationDTO();
             info.setId(rs.getInt("id"));
             info.setUserId(rs.getInt("user_id"));
             info.setRoomId(rs.getInt("room_id"));
-            info.setStartDate(rs.getDate("start_date").toLocalDate());
-            info.setEndDate(rs.getDate("end_date").toLocalDate());
+            info.setStartDate(rs.getDate("check_in").toLocalDate());   // <-- fixed
+            info.setEndDate(rs.getDate("check_out").toLocalDate());    // <-- fixed
             info.setStatus(rs.getString("status"));
             info.setTotalPrice(rs.getDouble("total_price"));
             info.setHotelName(rs.getString("hotel_name"));
@@ -42,6 +42,7 @@ public class ReservationDAO {
             return info;
         });
     }
+
 
     public List<ReservationDTO> findAllPendingsAndCancels() {
         String sql = """
@@ -69,28 +70,21 @@ public class ReservationDAO {
 
     public List<ReservationDTO> findAllPendingReservationsWithDetails() {
         String sql = """
-                    SELECT r.id, r.user_id, r.room_id, r.check_in, r.check_out, r.status, r.total_price,
-                                                     rm.number AS room_number, h.name AS hotel_name
-                                              FROM reservations r
-                                              JOIN rooms rm ON r.room_id = rm.id
-                                              JOIN hotels h ON rm.hotel_id = h.id
-                                              WHERE r.status = 'PENDING' AND r.status = 'ACCEPTED'
-                """;
+        SELECT r.id, r.user_id, r.room_id, r.check_in, r.check_out, r.status, r.total_price,
+               rm.number AS room_number, h.name AS hotel_name
+        FROM reservations r
+        JOIN rooms rm ON r.room_id = rm.id
+        JOIN hotels h ON rm.hotel_id = h.id
+        WHERE r.status IN (?, ?)
+    """;
 
-        return jdbcTemplate.query(sql, (rs, rowNum) -> {
-            ReservationDTO info = new ReservationDTO();
-            info.setId(rs.getInt("id"));
-            info.setUserId(rs.getInt("user_id"));
-            info.setRoomId(rs.getInt("room_id"));
-            info.setStartDate(rs.getDate("start_date").toLocalDate());
-            info.setEndDate(rs.getDate("end_date").toLocalDate());
-            info.setStatus(rs.getString("status"));
-            info.setTotalPrice(rs.getDouble("total_price"));
-            info.setHotelName(rs.getString("hotel_name"));
-            info.setRoomNumber(rs.getString("room_number"));
-            return info;
-        });
+        return jdbcTemplate.query(
+                sql,
+                new Object[]{ReservationStatus.PENDING.name(), ReservationStatus.ACCEPTED.name()},
+                BeanPropertyRowMapper.newInstance(ReservationDTO.class)
+        );
     }
+
 
     public void updateStatus(int reservationId, String status) {
         jdbcTemplate.update("UPDATE reservations SET status = ? WHERE id = ?", status, reservationId);

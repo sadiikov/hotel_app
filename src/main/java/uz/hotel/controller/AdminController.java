@@ -116,9 +116,11 @@ public class AdminController {
                 model.addAttribute("message", "not enough in balance");
                 return "error";
             }
-
+        }else if(status.equals("ACCEPTED")){
             user.setBalance(user.getBalance() - reservation.getTotalPrice());
             userDao.updateUser(user);
+            admin.get().setBalance(admin.get().getBalance() + reservation.getTotalPrice());
+            userDao.updateUser(admin.get());
         }
 
         reservationDAO.updateStatus(id, status);

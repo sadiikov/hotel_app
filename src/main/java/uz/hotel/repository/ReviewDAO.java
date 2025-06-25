@@ -27,6 +27,7 @@ public class ReviewDAO {
     }
     public List<Review> getReviewsByHotelId(Long hotelId) {
         String sql = "SELECT * FROM reviews WHERE hotel_id = ?";
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Review.class), hotelId);
+        return jdbcTemplate.query(sql, new Object[]{hotelId}, new BeanPropertyRowMapper<>(Review.class));
     }
+
 }

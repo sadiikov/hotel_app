@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import uz.hotel.dto.HotelWithReviews;
 import uz.hotel.dto.ReservationHistoryDTO;
 import uz.hotel.entity.*;
 import uz.hotel.entity.enums.ReservationStatus;
@@ -36,7 +37,16 @@ public class UserController {
             User currentUser = userByEmail.get();
             model.addAttribute("balance", currentUser.getBalance());
         }
-        model.addAttribute("hotels", hotelDAO.getAllHotels());
+        List<Hotel> allHotels = hotelDAO.getAllHotels();
+        List<HotelWithReviews> hotelWithReviewsList = new ArrayList<>();
+
+        for (Hotel allHotel : allHotels) {
+            List<Review> reviews = reviewDAO.getReviewsByHotelId((long) allHotel.getId()); // ← create this method
+            hotelWithReviewsList.add(new HotelWithReviews(allHotel, reviews));
+        }
+
+        model.addAttribute("hotelsWithReviews", hotelWithReviewsList);
+
         return "user/user-cabinet";
     }
 

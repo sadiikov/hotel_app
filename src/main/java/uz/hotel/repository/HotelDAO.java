@@ -23,7 +23,7 @@ public class HotelDAO {
     private final JdbcTemplate jdbcTemplate;
 
     public List<Hotel> getAllHotels() {
-        List<Hotel> hotels = jdbcTemplate.query("select * from hotels order by id", BeanPropertyRowMapper.newInstance(Hotel.class));
+        List<Hotel> hotels = jdbcTemplate.query("select * from hotels order by id ", BeanPropertyRowMapper.newInstance(Hotel.class));
         return hotels;
     }
     public int saveHotelAndReturnId(Hotel hotel) {

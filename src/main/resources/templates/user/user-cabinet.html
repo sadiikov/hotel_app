@@ -193,30 +193,37 @@
         <a href="/user/user-review">write review</a>
         <a href="/user/user-history">history</a>
         <a href="/user/user-balance">balance</a>
+        <a href="/logout">Log out</a>
+
     </nav>
 </header>
 
 <div class="container">
     <h2 style="margin-bottom: 20px;">Top Picks for You</h2>
     <div class="hotels">
-        <div class="hotel-card" th:each="hotel: ${hotels}">
-            <img th:text="${hotel.getImageUrl()}"
-                 src="https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=800"
-                 alt="Spa Service">
+        <div class="hotel-card" th:each="item: ${hotelsWithReviews}">
             <div class="details">
-                <h3 style="margin-top: 8px" th:text="${hotel.getName()}">Grand Palace Hotel</h3>
-                <p style="margin-top: 8px" th:text="${hotel.country} + ', ' + ${hotel.city}">Paris, France</p>
-                <p style="margin-top: 8px" th:text="${hotel.getLocation()}">Paris, France</p>
-                <div style="margin-top: 8px" th:text="${hotel.getRating()}">★★★★☆</div>
-                <a style="margin-top: 8px" th:href="@{'/user/view-hotel/' + ${hotel.id}}" class="view-btn">View</a>
+                <h3 style="margin-top: 8px" th:text="${item.hotel.name}">Hotel Name</h3>
+                <p style="margin-top: 8px" th:text="${item.hotel.country} + ', ' + ${item.hotel.city}">City</p>
+                <p style="margin-top: 8px" th:text="${item.hotel.location}">Location</p>
+                <div style="margin-top: 8px" th:text="${item.hotel.rating}">★★★★☆</div>
+                <a style="margin-top: 8px" th:href="@{'/user/view-hotel/' + ${item.hotel.id}}" class="view-btn">View</a>
             </div>
-<!--            <div class="reviews-section" style="margin-top: 10px;" th:each="review: ${reviews}">-->
-<!--                <h4>User Reviews:</h4>-->
-<!--                <strong th:text="'Rating: ' + ${review.rating} + '★'"></strong>-->
-<!--                <span th:text="${review.comment}"></span>-->
-<!--            </div>-->
+
+            <!-- Reviews Section -->
+            <div class="reviews-section" style="margin-top: 10px; margin-left: 10px">
+                <h4>User Reviews:</h4>
+                <div th:if="${#lists.isEmpty(item.reviews)}">
+                    <p>No reviews yet.</p>
+                </div>
+                <div th:each="review: ${item.reviews}">
+                    <strong th:text="'Rating: ' + ${review.rating}"></strong><br>
+                    <span th:text="${review.getText()}"></span><br><br>
+                </div>
+            </div>
         </div>
     </div>
+
 </div>
 </div>
 </body>

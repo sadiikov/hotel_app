@@ -59,7 +59,7 @@ public class AuthController {
         user.setRole(UserRole.USER);
 
         userDAO.saveUser(user);
-        return "redirect:/sign-in";
+        return "redirect:/auth/sign-in";
     }
 
     @GetMapping("/sign-in")

@@ -9,5 +9,6 @@ public class Hotel {
     private String country;
     private String city;
     private String location;
+    private String imageUrl;
     private Double rating; // average rating of the hotel
 }

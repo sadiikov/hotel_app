@@ -81,7 +81,7 @@ public class RoomDAO {
     public List<Room> getRoomsByHotelId(Long id) {
         return jdbcTemplate.query(
                 "SELECT * FROM rooms WHERE hotel_id = ? and status = ?",
-                new Object[]{id, RoomStatus.ACTIVE.name()},
+                new Object[]{id, RoomStatus.AVAILABLE.name()},
                 BeanPropertyRowMapper.newInstance(Room.class)
         );
     }
