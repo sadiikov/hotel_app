@@ -7,6 +7,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
@@ -23,7 +25,6 @@ public class WebMVCConfig {
 
     final ApplicationContext applicationContext;
 
-
     @Bean
     public DriverManagerDataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -38,11 +39,6 @@ public class WebMVCConfig {
     public JdbcTemplate jdbcTemplate(){
         return new JdbcTemplate(dataSource());
     }
-
-
-
-
-
 
     @Bean
     public SpringResourceTemplateResolver templateResolver(){
@@ -68,4 +64,10 @@ public class WebMVCConfig {
         viewResolver.setViewNames(new String[] {"*"});
         return viewResolver;
     }
+
+    @Bean
+    public MultipartResolver multipartResolver() {
+        return new StandardServletMultipartResolver(); // simpler than Commons
+    }
+
 }

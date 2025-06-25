@@ -1,6 +1,7 @@
 package uz.hotel.entity;
 
 import lombok.Data;
+import uz.hotel.entity.enums.RoomStatus;
 import uz.hotel.entity.enums.RoomType;
 
 @Data
@@ -11,5 +12,5 @@ public class Room {
     private RoomType type;
     private Double price;
     private String description;
-    private Double rating; // average rating from reviews
+    private RoomStatus status;
 }

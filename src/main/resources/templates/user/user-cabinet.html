@@ -1,10 +1,223 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>User Cabinet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            padding: 20px 40px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 28px;
+        }
+
+        nav a {
+            color: white;
+            margin-left: 20px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        h1 a {
+            text-decoration: none;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        h1 a:hover {
+            color: #ffdd57; /* Soft gold on hover */
+        }
+
+        .hero {
+            background-image: url("https://images.unsplash.com/photo-1542314831-068cd1dbfeeb");
+            background-size: cover;
+            background-position: center;
+            padding: 80px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h2 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 18px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .hotels {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .hotel-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .hotel-card:hover {
+            transform: scale(1.02);
+        }
+
+        .hotel-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .hotel-card .details {
+            padding: 15px;
+        }
+
+        .hotel-card .details h3 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .hotel-card .details p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .rating {
+            color: #f4c150;
+            margin-top: 8px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #222;
+            color: #ccc;
+            margin-top: 40px;
+        }
+
+        .search-bar {
+            background: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-bar input {
+            padding: 0.8rem;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .search-bar button {
+            background-color: #0071c2;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .view-btn {
+            display: inline-block;
+            background-color: #0071c2;
+            color: white;
+            padding: 10px 18px;
+            text-align: center;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .view-btn:hover {
+            background-color: #005a9c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+
+        @media (max-width: 768px) {
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .search-bar input {
+                width: 100%;
+            }
+
+        }
+    </style>
 </head>
 <body>
-User
+
+<header>
+    <h1><a href="/user">User Cabinet</a></h1>
+    <h3 th:text="'Balance: $' + ${balance}">Balance Placeholder</h3>
+    <nav>
+        <a href="/user/my-orders">my orders</a>
+        <a href="/user/user-review">write review</a>
+        <a href="/user/user-history">history</a>
+        <a href="/user/user-balance">balance</a>
+    </nav>
+</header>
+
+<div class="container">
+    <h2 style="margin-bottom: 20px;">Top Picks for You</h2>
+    <div class="hotels">
+        <div class="hotel-card" th:each="hotel: ${hotels}">
+            <img th:text="${hotel.getImageUrl()}"
+                 src="https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=800"
+                 alt="Spa Service">
+            <div class="details">
+                <h3 style="margin-top: 8px" th:text="${hotel.getName()}">Grand Palace Hotel</h3>
+                <p style="margin-top: 8px" th:text="${hotel.country} + ', ' + ${hotel.city}">Paris, France</p>
+                <p style="margin-top: 8px" th:text="${hotel.getLocation()}">Paris, France</p>
+                <div style="margin-top: 8px" th:text="${hotel.getRating()}">★★★★☆</div>
+                <a style="margin-top: 8px" th:href="@{'/user/view-hotel/' + ${hotel.id}}" class="view-btn">View</a>
+            </div>
+<!--            <div class="reviews-section" style="margin-top: 10px;" th:each="review: ${reviews}">-->
+<!--                <h4>User Reviews:</h4>-->
+<!--                <strong th:text="'Rating: ' + ${review.rating} + '★'"></strong>-->
+<!--                <span th:text="${review.comment}"></span>-->
+<!--            </div>-->
+        </div>
+    </div>
+</div>
+</div>
 </body>
 </html>
