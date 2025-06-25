@@ -1,0 +1,103 @@
+<div th:fragment="content">
+  <div class="container mt-5">
+    <h2 class="mb-4">Add Hotel</h2>
+
+    <form action="/admin/add-hotel" method="post">
+      <!-- Hotel Name -->
+      <div class="mb-3">
+        <label class="form-label">Hotel Name</label>
+        <input type="text" class="form-control" name="name" required>
+      </div>
+
+      <!-- Country -->
+      <div class="mb-3">
+        <label class="form-label">Country</label>
+        <select class="form-select" name="country" id="country" required onchange="updateCities()">
+          <option value="">Choose country</option>
+          <option value="USA">USA</option>
+          <option value="Germany">Germany</option>
+          <option value="Uzbekistan">Uzbekistan</option>
+        </select>
+      </div>
+
+      <!-- City -->
+      <div class="mb-3">
+        <label class="form-label">City</label>
+        <select class="form-select" name="city" id="city" required>
+          <option value="">Choose city</option>
+        </select>
+      </div>
+
+      <!-- Location -->
+      <div class="mb-3">
+        <label class="form-label">Location</label>
+        <input type="text" class="form-control" name="location" required placeholder="e.g. Main Street 12, near river">
+      </div>
+
+      <!-- Room Types Configuration -->
+      <div class="mb-4">
+        <label class="form-label">Room Configuration</label>
+
+        <!-- STANDART Rooms -->
+        <div class="row mb-2">
+          <div class="col-md-3">
+            <label>STANDART Count</label>
+            <input type="number" class="form-control" name="standartCount" min="0" value="0" required>
+          </div>
+          <div class="col-md-3">
+            <label>STANDART Price</label>
+            <input type="number" class="form-control" name="standartPrice" step="0.01" required>
+          </div>
+          <div class="col-md-6">
+            <label>STANDART Description</label>
+            <input type="text" class="form-control" name="standartDescription" placeholder="e.g. Cozy room with balcony" required>
+          </div>
+        </div>
+
+        <!-- LUXE Rooms -->
+        <div class="row">
+          <div class="col-md-3">
+            <label>LUXE Count</label>
+            <input type="number" class="form-control" name="luxeCount" min="0" value="0" required>
+          </div>
+          <div class="col-md-3">
+            <label>LUXE Price</label>
+            <input type="number" class="form-control" name="luxePrice" step="0.01" required>
+          </div>
+          <div class="col-md-6">
+            <label>LUXE Description</label>
+            <input type="text" class="form-control" name="luxeDescription" placeholder="e.g. Spacious suite with jacuzzi" required>
+          </div>
+        </div>
+      </div>
+
+      <input type="hidden" name="rating" value="0.0">
+
+      <button type="submit" class="btn btn-success w-100">Save Hotel</button>
+    </form>
+
+    <a href="/admin" class="btn btn-secondary mt-3">Back to Dashboard</a>
+  </div>
+
+  <script>
+    const cityOptions = {
+      USA: ['New York', 'Los Angeles', 'Chicago'],
+      Germany: ['Berlin', 'Munich', 'Frankfurt'],
+      Uzbekistan: ['Tashkent', 'Samarkand', 'Bukhara']
+    };
+
+    function updateCities() {
+      const country = document.getElementById('country').value;
+      const citySelect = document.getElementById('city');
+      citySelect.innerHTML = '<option value="">Choose city</option>';
+      if (cityOptions[country]) {
+        cityOptions[country].forEach(city => {
+          const opt = document.createElement('option');
+          opt.value = city;
+          opt.textContent = city;
+          citySelect.appendChild(opt);
+        });
+      }
+    }
+  </script>
+</div>

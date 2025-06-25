@@ -12,5 +12,6 @@ public class Reservation {
     private int roomId;
     private Timestamp checkIn;
     private Timestamp checkOut;
+    private Double totalPrice;
     private ReservationStatus status;
 }

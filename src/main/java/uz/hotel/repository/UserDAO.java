@@ -26,6 +26,7 @@ public class UserDAO {
                     return user;
                 }).stream().findFirst();
     }
+
     public Optional<User> getUserByEmail(String email) {
         return jdbcTemplate.query("select * from users where email = ?", new Object[]{email},
                 (rs, rowNum) ->{
@@ -43,6 +44,11 @@ public class UserDAO {
     public void saveUser(User user) {
         jdbcTemplate.update("insert into users(name, email, password, role, balance) values (?,?,?,?,?)",
                             user.getName(), user.getEmail(), user.getPassword(), user.getRole().name(), user.getBalance());
+    }
+
+    public void updateUser(User user) {
+        String sql = "UPDATE users SET balance = ? WHERE id = ?";
+        jdbcTemplate.update(sql, user.getBalance(), user.getId());
     }
 }
 
