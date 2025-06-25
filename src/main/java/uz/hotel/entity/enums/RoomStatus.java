@@ -1,7 +1,7 @@
 package uz.hotel.entity.enums;
 
 public enum RoomStatus {
-    AVAILABLE,
+    ACTIVE,
     OCCUPIED,
     CLEANING,
     REPAIRING

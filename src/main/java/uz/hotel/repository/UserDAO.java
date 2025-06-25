@@ -1,11 +1,13 @@
 package uz.hotel.repository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import uz.hotel.entity.User;
 import uz.hotel.entity.enums.UserRole;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -25,6 +27,12 @@ public class UserDAO {
                     user.setBalance(rs.getDouble("balance"));
                     return user;
                 }).stream().findFirst();
+    }
+
+    public Optional<User> getUserById(int id) {
+        String sql = "SELECT * FROM users WHERE id = ?";
+        List<User> users = jdbcTemplate.query(sql, new Object[]{id}, BeanPropertyRowMapper.newInstance(User.class));
+        return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
     }
 
     public Optional<User> getUserByEmail(String email) {
@@ -49,6 +57,10 @@ public class UserDAO {
     public void updateUser(User user) {
         String sql = "UPDATE users SET balance = ? WHERE id = ?";
         jdbcTemplate.update(sql, user.getBalance(), user.getId());
+    }
+
+    public void updateUserBalance(int id, Double balance) {
+         jdbcTemplate.update("update users set balance = balance + ? where id = ?", balance, id);
     }
 }
 

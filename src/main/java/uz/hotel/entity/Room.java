@@ -12,6 +12,5 @@ public class Room {
     private RoomType type;
     private Double price;
     private String description;
-    private Double rating; // average rating from reviews
     private RoomStatus status;
 }
