@@ -7,7 +7,9 @@ import java.sql.Timestamp;
 public class Review {
     private int id;
     private int userId;
-    private int roomId;
+    private Long hotelId;
+//    private Reservation reservation;
+    private Long reservationId;
     private int rating;
     private String text;
     private Timestamp createdAt;

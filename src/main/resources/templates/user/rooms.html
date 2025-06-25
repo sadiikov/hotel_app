@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Rooms</title>
+    <style>
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(to right, #283e51, #485563);
+            padding: 20px 40px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 28px;
+        }
+
+        nav a {
+            color: white;
+            margin-left: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #ffd700;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .hotels {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .hotel-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #ddd;
+        }
+
+        .hotel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .hotel-card .details {
+            padding: 20px;
+        }
+
+        .hotel-card .details h3 {
+            font-size: 22px;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+
+        .hotel-card .details p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 6px;
+        }
+
+        .hotel-card .details a {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 10px 18px;
+            background-color: #0071c2;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .hotel-card .details a:hover {
+            background-color: #005fa3;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .hotels {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Available Rooms</h1>
+    <h3 th:text="'Balance: $' + ${balance}">Balance: $0.00</h3>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/user/user-cabinet">User Cabinet</a>
+    </nav>
+</header>
+
+<div class="container">
+    <h2 style="margin-bottom: 20px;">Choose Your Room</h2>
+    <div class="hotels">
+        <div class="hotel-card" th:each="room : ${rooms}">
+            <div class="details">
+                <h3 th:text="'Room #' + ${room.number}">Room #101</h3>
+                <p th:text="'Type: ' + ${room.type}">Standard</p>
+                <p th:text="'Price: $' + ${room.price}">Price</p>
+                <p th:text="'Description: ' + ${room.description}">Cozy with sea view</p>
+                <p th:text="'Hotel ID: ' + ${room.hotelId}">Hotel ID</p>
+                <p th:text="'Status: ' + ${room.status}">Available</p>
+                <a th:href="@{'/user/view-room/' + ${room.id}}">Book Now</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
