@@ -1,0 +1,50 @@
+<div th:fragment="content">
+  <div class="container mt-4">
+    <h2 class="mb-4 text-center">Pending Reservations</h2>
+
+    <div th:if="${#lists.isEmpty(reservations)}">
+      <div class="alert alert-info">No pending reservations found.</div>
+    </div>
+
+    <div th:if="${!#lists.isEmpty(reservations)}">
+      <table class="table table-bordered align-middle text-center">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>User ID</th>
+          <th>Hotel Name</th>
+          <th>Room Number</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="res : ${reservations}">
+          <td th:text="${res.id}"></td>
+          <td th:text="${res.userId}"></td>
+          <td th:text="${res.hotelName}"></td>
+          <td th:text="${res.roomNumber}"></td>
+          <td th:text="${res.startDate}"></td>
+          <td th:text="${res.endDate}"></td>
+          <td th:text="${res.status}"></td>
+          <td>
+            <form th:action="@{/admin/manage-reservation/update}" method="post" style="display:inline;">
+              <input type="hidden" name="id" th:value="${res.id}">
+              <input type="hidden" name="status" value="ACCEPTED">
+              <button type="submit" class="btn btn-success btn-sm">Accept</button>
+            </form>
+
+            <form th:action="@{/admin/manage-reservation/update}" method="post" style="display:inline;">
+              <input type="hidden" name="id" th:value="${res.id}">
+              <input type="hidden" name="status" value="CLOSED">
+              <button type="submit" class="btn btn-danger btn-sm">CLOSE</button>
+            </form>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
